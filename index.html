@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRAE Official Store - Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Crimson+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #1a2332;
+            --color-secondary: #2d3e50;
+            --color-accent: #b8936d;
+            --color-background: #f8f7f5;
+            --color-surface: #ffffff;
+            --color-text: #2a2a2a;
+            --color-text-light: #6b6b6b;
+            --color-border: #e0ddd9;
+            --color-success: #5a8b6f;
+            --color-error: #c24d4d;
+            --font-serif-ja: 'Noto Serif JP', serif;
+            --font-serif-en: 'Cormorant Garamond', serif;
+            --font-body-en: 'Crimson Pro', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif-ja);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif-en);
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+
+        .cart-button {
+            background-color: transparent;
+            border: 1px solid var(--color-background);
+            color: var(--color-background);
+            padding: 0.6rem 1.5rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: var(--font-serif-ja);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .cart-button:hover {
+            background-color: var(--color-background);
+            color: var(--color-primary);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-accent);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-background);
+            padding: 4rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(248,247,245,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            padding: 1.5rem;
+            position: sticky;
+            top: 73px;
+            z-index: 999;
+        }
+
+        .filter-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+
+        .filter-button {
+            background-color: transparent;
+            border: 1px solid var(--color-border);
+            padding: 0.5rem 1.2rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: var(--font-serif-ja);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button.active {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            border-color: var(--color-primary);
+        }
+
+        .filter-button:hover:not(.active) {
+            border-color: var(--color-accent);
+        }
+
+        /* Products Grid */
+        .products-container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .product-card {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-accent);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #e8e6e3 0%, #d4d1cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(184, 147, 109, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            font-family: var(--font-body-en);
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-body-en);
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            color: var(--color-primary);
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            border: none;
+            padding: 0.8rem;
+            cursor: pointer;
+            font-family: var(--font-serif-ja);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--color-secondary);
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .cart-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cart-content {
+            background-color: var(--color-surface);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cart-header {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: var(--color-background);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .close-cart:hover {
+            transform: rotate(90deg);
+        }
+
+        .cart-items {
+            padding: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e8e6e3 0%, #d4d1cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .cart-item-price {
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            background-color: var(--color-border);
+            border: none;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background-color: var(--color-accent);
+            color: white;
+        }
+
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--color-error);
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-decoration: underline;
+            margin-top: 0.5rem;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--color-text-light);
+        }
+
+        .cart-summary {
+            padding: 1.5rem;
+            background-color: #faf9f7;
+            border-top: 2px solid var(--color-border);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            border-top: 2px solid var(--color-border);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: var(--color-accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-family: var(--font-serif-ja);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #a17d5a;
+        }
+
+        .checkout-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 1.5rem;
+            background-color: var(--color-success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 2px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            animation: slideInRight 0.3s ease;
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            padding: 3rem 1.5rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .filter-content {
+                justify-content: center;
+            }
+
+            .cart-content {
+                width: 95%;
+            }
+
+            .notification {
+                right: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">ASTRAE</h1>
+            <button class="cart-button" onclick="toggleCart()">
+                カート
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2 class="hero-title">Official Store</h2>
+            <p class="hero-subtitle">タレントの世界観を表現した、特別なアイテムをお届けします</p>
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        <div class="filter-content">
+            <span class="filter-label">カテゴリ：</span>
+            <button class="filter-button active" onclick="filterProducts('all')">すべて</button>
+            <button class="filter-button" onclick="filterProducts('apparel')">アパレル</button>
+            <button class="filter-button" onclick="filterProducts('accessory')">アクセサリー</button>
+            <button class="filter-button" onclick="filterProducts('digital')">デジタル</button>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <div class="products-container">
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3 class="cart-title">ショッピングカート</h3>
+                <button class="close-cart" onclick="toggleCart()">×</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <div class="cart-empty">カートは空です</div>
+            </div>
+            <div class="cart-summary" id="cartSummary" style="display: none;">
+                <div class="summary-row">
+                    <span>小計</span>
+                    <span id="subtotal">¥0</span>
+                </div>
+                <div class="summary-row">
+                    <span>送料</span>
+                    <span>¥500</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>合計</span>
+                    <span id="total">¥0</span>
+                </div>
+                <button class="checkout-btn" onclick="checkout()">購入手続きへ進む</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        商品をカートに追加しました
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2025 ASTRAE. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Product Data
+        const products = [
+            {
+                id: 1,
+                name: 'ASTRAE ロゴTシャツ（ホワイト）',
+                category: 'apparel',
+                price: 3800,
+                tag: 'NEW',
+                icon: '👕'
+            },
+            {
+                id: 2,
+                name: 'ASTRAE ロゴTシャツ（ブラック）',
+                category: 'apparel',
+                price: 3800,
+                tag: 'NEW',
+                icon: '👕'
+            },
+            {
+                id: 3,
+                name: 'オフィシャルパーカー',
+                category: 'apparel',
+                price: 6500,
+                tag: 'POPULAR',
+                icon: '🧥'
+            },
+            {
+                id: 4,
+                name: 'アクリルキーホルダー',
+                category: 'accessory',
+                price: 1200,
+                icon: '🔑'
+            },
+            {
+                id: 5,
+                name: 'オフィシャルトートバッグ',
+                category: 'accessory',
+                price: 2800,
+                icon: '👜'
+            },
+            {
+                id: 6,
+                name: 'ステッカーセット（5枚入り）',
+                category: 'accessory',
+                price: 800,
+                tag: 'NEW',
+                icon: '✨'
+            },
+            {
+                id: 7,
+                name: 'デジタル壁紙セット',
+                category: 'digital',
+                price: 1500,
+                icon: '🖼️'
+            },
+            {
+                id: 8,
+                name: 'ボイスパック Vol.1',
+                category: 'digital',
+                price: 2000,
+                tag: 'POPULAR',
+                icon: '🎵'
+            },
+            {
+                id: 9,
+                name: 'マグカップ',
+                category: 'accessory',
+                price: 2200,
+                icon: '☕'
+            },
+            {
+                id: 10,
+                name: 'クリアファイル 3枚セット',
+                category: 'accessory',
+                price: 900,
+                icon: '📁'
+            },
+            {
+                id: 11,
+                name: 'オリジナルキャップ',
+                category: 'apparel',
+                price: 3200,
+                icon: '🧢'
+            },
+            {
+                id: 12,
+                name: 'アニバーサリーTシャツ',
+                category: 'apparel',
+                price: 4200,
+                tag: 'LIMITED',
+                icon: '👕'
+            }
+        ];
+
+        // Cart State
+        let cart = [];
+
+        // Initialize
+        function init() {
+            renderProducts(products);
+            updateCartUI();
+        }
+
+        // Render Products
+        function renderProducts(productsToRender) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = productsToRender.map(product => `
+                <div class="product-card" data-category="${product.category}">
+                    <div class="product-image">
+                        ${product.icon}
+                        ${product.tag ? `<div class="product-tag">${product.tag}</div>` : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${getCategoryName(product.category)}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">¥${product.price.toLocaleString()}</div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                            カートに追加
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get Category Name
+        function getCategoryName(category) {
+            const names = {
+                'apparel': 'Apparel',
+                'accessory': 'Accessory',
+                'digital': 'Digital'
+            };
+            return names[category] || category;
+        }
+
+        // Filter Products
+        function filterProducts(category) {
+            // Update filter buttons
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter products
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        // Add to Cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showNotification();
+        }
+
+        // Update Cart UI
+        function updateCartUI() {
+            const countElement = document.getElementById('cartCount');
+            const itemsElement = document.getElementById('cartItems');
+            const summaryElement = document.getElementById('cartSummary');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            countElement.textContent = totalItems;
+
+            if (cart.length === 0) {
+                itemsElement.innerHTML = '<div class="cart-empty">カートは空です</div>';
+                summaryElement.style.display = 'none';
+            } else {
+                itemsElement.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image">${item.icon}</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">¥${item.price.toLocaleString()}</div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span class="quantity-value">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${item.id})">削除</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const shipping = 500;
+                const total = subtotal + shipping;
+
+                document.getElementById('subtotal').textContent = `¥${subtotal.toLocaleString()}`;
+                document.getElementById('total').textContent = `¥${total.toLocaleString()}`;
+                summaryElement.style.display = 'block';
+            }
+        }
+
+        // Update Quantity
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        // Remove from Cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        // Toggle Cart
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('active');
+        }
+
+        // Show Notification
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) {
+                alert('カートが空です');
+                return;
+            }
+            alert('購入手続きページへ移動します（デモ版のため実際の決済は行われません）');
+            // In production, redirect to checkout page
+            // window.location.href = '/checkout';
+        }
+
+        // Close modal on outside click
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleCart();
+            }
+        });
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
